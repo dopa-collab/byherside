@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bluebell</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1f2a37">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#1f2a37;--card:#2a3746;--ink:#e8eef3;--soft:#9fb2c3;--accent:#8fb4d3;--accent-ink:#17212c;--line:#3a4a5b;--wall:url(wallpaper-dark.jpg);--veil:rgba(31,42,55,.38);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef3f7;--card:#fff;--ink:#2c3e50;--soft:#6b8196;--accent:#6a93b8;--accent-ink:#fff;--line:#d5e0ea;--wall:url(wallpaper-light.jpg);--veil:rgba(238,243,247,.62)}}
+:root[data-theme="light"]{--bg:#eef3f7;--card:#fff;--ink:#2c3e50;--soft:#6b8196;--accent:#6a93b8;--accent-ink:#fff;--line:#d5e0ea;--wall:url(wallpaper-light.jpg);--veil:rgba(238,243,247,.62)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(var(--veil),var(--veil)),var(--wall) center/cover no-repeat}
+body{background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.5}
+main{max-width:460px;margin:0 auto;padding:20px 18px 40px}
+h1{font-size:1.7rem;font-weight:normal;margin:6px 0 2px}
+.sub{color:var(--soft);margin:0 0 18px;font-size:.95rem}
+.top{display:flex;justify-content:space-between;align-items:flex-start}
+button{font:inherit;color:inherit;cursor:pointer}
+.theme{background:none;border:1px solid var(--line);border-radius:20px;padding:6px 12px;color:var(--soft);font-size:.85rem}
+.tabs{display:flex;gap:6px;background:var(--card);padding:5px;border-radius:30px;margin-bottom:22px}
+.tabs button{flex:1;border:0;background:none;padding:10px;border-radius:24px;color:var(--soft)}
+.tabs button.on{background:var(--accent);color:var(--accent-ink)}
+.dial{position:relative;width:260px;max-width:80vw;aspect-ratio:1;margin:0 auto 10px}
+.dial svg{width:100%;height:100%;transform:rotate(-90deg)}
+.dial circle{fill:none;stroke-width:9}
+.track{stroke:var(--line)}
+.prog{stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset .4s linear}
+.read{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.time{font-size:3.2rem;font-variant-numeric:tabular-nums;letter-spacing:1px}
+.phase{color:var(--soft);font-size:.95rem}
+.row{display:flex;gap:10px;justify-content:center;margin:14px 0}
+.btn{border:1px solid var(--line);background:var(--card);padding:12px 22px;border-radius:30px}
+.btn.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);min-width:130px}
+.lens{text-align:center;color:var(--soft);font-size:.9rem;margin-bottom:6px}
+.lens button{background:none;border:0;color:var(--accent);text-decoration:underline;font-size:.9rem;padding:2px 8px}
+.custom{display:none;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin:10px 0;color:var(--soft);font-size:.9rem}
+.custom.open{display:flex}
+.custom input{width:58px;font:inherit;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-align:center}
+.custom .btn{padding:8px 18px}
+.breathe-link{display:block;margin:4px auto 0;background:none;border:0;color:var(--accent);text-decoration:underline;font-size:.95rem;padding:6px 12px}
+.bov{overflow-y:auto;position:fixed;inset:0;z-index:10;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:24px;text-align:center}
+.bov.open{display:flex}
+.bov>*{flex-shrink:0}
+.orb{width:230px;max-width:70vw;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--accent),var(--line));opacity:.85;transform:scale(.55)}
+.blabel{font-size:1.7rem;min-height:2.2rem}
+.bcount{color:var(--soft);font-size:1.1rem;min-height:1.6rem}
+.bhint{color:var(--soft);font-size:.9rem;max-width:280px}
+.hard-link{display:block;margin:2px auto 0;background:none;border:0;color:var(--soft);text-decoration:underline;font-size:.95rem;padding:6px 12px}
+.hcard{white-space:pre-wrap;background:var(--card);border-left:4px solid var(--accent);border-radius:14px;padding:20px 20px;max-width:380px;font-size:1.05rem;line-height:1.75;text-align:left;max-height:46vh;overflow-y:auto}
+.hrow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.hsmall{color:var(--soft);font-size:.9rem;max-width:300px}
+.snd-link{display:block;margin:2px auto 0;background:none;border:0;color:var(--soft);text-decoration:underline;font-size:.95rem;padding:6px 12px}
+.snd{display:none;background:var(--card);border-radius:14px;padding:14px 16px;margin:8px 0;gap:12px;flex-direction:column}
+.snd.open{display:flex}
+.snd .sr{display:flex;align-items:center;justify-content:space-between}
+.snd .tg{border:1px solid var(--line);background:none;border-radius:20px;padding:6px 16px;color:var(--soft);min-width:64px}
+.snd .tg.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.snd input[type=range]{width:100%;accent-color:var(--accent)}
+.snd small{color:var(--soft)}
+svg.i{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.btn,.theme,.tabs button,button.breathe-link,button.hard-link,button.snd-link,.lens button{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+button.breathe-link,button.hard-link,button.snd-link{display:flex;width:100%;margin:10px 0 0;padding:13px;border:1px solid var(--line);background:var(--card);border-radius:30px;text-decoration:none;color:var(--ink);font-size:1rem}
+button.breathe-link svg{color:var(--accent)}
+button.hard-link svg{color:#d99aa8}
+button.snd-link svg{color:var(--accent)}
+.lens{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.lens button{border:1px solid var(--line);background:var(--card);text-decoration:none;color:var(--ink);border-radius:20px;padding:7px 14px;font-size:.9rem}
+.btn:active,button.breathe-link:active,button.hard-link:active,button.snd-link:active,.lens button:active{transform:scale(.97)}
+.tabs button.on svg{stroke:var(--accent-ink)}
+.cat{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
+.catbtn{pointer-events:auto;position:relative;width:58px;height:58px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.22);animation:bob 3.4s ease-in-out infinite;padding:0}
+.catbtn svg{width:36px;height:36px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.catbtn:active{transform:scale(.94)}
+.catbtn.nudge{animation:bob 3.4s ease-in-out infinite,wiggle .6s ease-in-out 3}
+.badge{position:absolute;top:2px;right:2px;width:14px;height:14px;border-radius:50%;background:#e58fa0;border:2px solid var(--card);display:none}
+.badge.on{display:block}
+.catbub{pointer-events:auto;max-width:230px;background:var(--card);border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:12px 14px;font-size:.98rem;line-height:1.5;box-shadow:0 6px 18px rgba(0,0,0,.22);display:none}
+.catbub.show{display:block}
+main{padding-bottom:110px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes wiggle{0%,100%{rotate:0deg}25%{rotate:-10deg}75%{rotate:10deg}}
+@media (prefers-reduced-motion:reduce){.catbtn,.catbtn.nudge{animation:none}}
+.catbtn svg .eye{transform-box:fill-box;transform-origin:center;animation:blink 4.5s infinite}
+.catbtn svg .earL{transform-box:fill-box;transform-origin:bottom center;animation:twL 8s infinite}
+.catbtn svg .earR{transform-box:fill-box;transform-origin:bottom center;animation:twR 11s infinite 3s}
+.catbtn svg .whisk{transform-box:fill-box;transform-origin:center;animation:whisk 6s ease-in-out infinite}
+.catbtn svg.hop{animation:hop .55s ease-out}
+.heartpop{position:absolute;top:-6px;left:50%;width:18px;height:18px;margin-left:-9px;color:#e58fa0;pointer-events:none;animation:heartup 1.1s ease-out forwards}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.08)}}
+@keyframes twL{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-14deg)}92%{transform:rotate(5deg)}95%{transform:rotate(-7deg)}}
+@keyframes twR{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(14deg)}92%{transform:rotate(-5deg)}95%{transform:rotate(7deg)}}
+@keyframes whisk{0%,70%,100%{transform:scaleX(1)}80%{transform:scaleX(1.08)}90%{transform:scaleX(.94)}}
+@keyframes hop{0%{transform:translateY(0) scale(1,1)}25%{transform:translateY(0) scale(1.1,.88)}55%{transform:translateY(-12px) scale(.94,1.08)}100%{transform:translateY(0) scale(1,1)}}
+@keyframes heartup{0%{opacity:0;transform:translateY(8px) scale(.5)}20%{opacity:1}100%{opacity:0;transform:translateY(-34px) scale(1.1)}}
+@media (prefers-reduced-motion:reduce){.catbtn svg *,.catbtn svg.hop,.heartpop{animation:none}}
+.msg{background:var(--card);border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;margin:18px 0;font-size:1.05rem;display:none}
+.msg.show{display:block}
+.totals{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+.totals div{background:var(--card);border-radius:14px;padding:12px 8px;text-align:center}
+.totals b{display:block;font-size:1.25rem;font-weight:normal}
+.totals span{color:var(--soft);font-size:.85rem}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div><h1>Hi, Bluebell</h1><p class="sub">I'm by your side. Take it one session at a time.</p></div>
+    <button class="theme" id="themeBtn" aria-label="Switch light or dark">Theme</button>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button id="tabP" class="on">Pomodoro</button>
+    <button id="tabS">Stopwatch</button>
+  </div>
+
+  <div class="dial">
+    <svg viewBox="0 0 100 100"><circle class="track" cx="50" cy="50" r="45"/><circle class="prog" id="prog" cx="50" cy="50" r="45" stroke-dasharray="282.74" stroke-dashoffset="0"/></svg>
+    <div class="read"><div class="time" id="time">25:00</div><div class="phase" id="phase">Focus</div></div>
+  </div>
+
+  <div class="lens" id="lens">Length: <button id="l25">25 / 5</button><button id="l50">50 / 10</button><button id="lc">Custom</button></div>
+  <div class="custom" id="custom"><label>Focus <input id="cf" type="number" min="1" max="180" inputmode="numeric" value="30"> min</label><label>Break <input id="cb" type="number" min="1" max="60" inputmode="numeric" value="5"> min</label><button class="btn" id="cset">Set</button></div>
+
+  <div class="row">
+    <button class="btn main" id="go">Start</button>
+    <button class="btn" id="reset">Reset</button>
+  </div>
+  <div class="msg" id="msg" role="status"></div>
+  <button class="breathe-link" id="blink">Breathe for a minute</button>
+  <button class="hard-link" id="hlink">Having a hard day?</button>
+
+  
+<div class="bov" id="bov" role="dialog" aria-label="Breathing exercise">
+  <div class="blabel" id="blabel">Get comfortable</div>
+  <div class="orb" id="orb"></div>
+  <div class="bcount" id="bcount"></div>
+  <div class="bhint">In through your nose for 4, out slowly for 6. There is no rush and nothing to get right.</div>
+  <button class="btn main" id="bdone">Close</button>
+</div>
+
+<div class="bov" id="hov" role="dialog" aria-label="Hard day">
+  <div class="blabel">It's okay to have a hard day.</div>
+  <div class="hcard" id="hcard"></div>
+  <div class="hsmall">Nothing to do here. No studying, no goals.</div>
+  <div class="hrow">
+    <button class="btn" id="hnext">Another note</button>
+    <button class="btn" id="hbreathe">Breathe</button>
+    <button class="btn main" id="hclose">Close</button>
+  </div>
+</div>
+  <button class="snd-link" id="slink">Sounds (optional)</button>
+  <div class="snd" id="snd">
+    <div class="sr"><span>Soft music</span><button class="tg" id="tMus">Off</button></div>
+    <div><small>Volume</small><input type="range" id="vol" min="0" max="100" value="40" aria-label="Volume"></div>
+  </div>
+
+
+  <div class="totals">
+    <div><b id="tToday">0m</b><span>Today</span></div>
+    <div><b id="tWeek">0m</b><span>This week</span></div>
+    <div><b id="tMonth">0m</b><span>This month</span></div>
+  </div>
+</main>
+
+
+<div class="cat" id="cat">
+  <div class="catbub" id="catbub" role="status"></div>
+  <button class="catbtn" id="catbtn" aria-label="Your cat has a message">
+    <svg viewBox="0 0 48 48" id="catsvg" aria-hidden="true"><g class="earL"><path d="M9 20L8 6l11 7"/></g><g class="earR"><path d="M39 20l1-14-11 7"/></g><path d="M9 20c0 12 6 20 15 20s15-8 15-20c0-5-3-8-6-9-6-2-12-2-18 0-3 1-6 4-6 9z"/><ellipse class="eye" cx="18" cy="24" rx="1.5" ry="2" fill="currentColor" stroke="none"/><ellipse class="eye" cx="30" cy="24" rx="1.5" ry="2" fill="currentColor" stroke="none"/><path d="M22.5 29h3l-1.5 2z" fill="currentColor"/><path d="M24 31c0 2-1.5 3-3 3M24 31c0 2 1.5 3 3 3"/><g class="whisk"><path d="M12 29H5M12 32l-6 2M36 29h7M36 32l6 2"/></g></svg>
+    <span class="badge" id="badge"></span>
+  </button>
+</div>
+<script>
+// ---- Messages from me (placeholders: replace with your own words) ----
+const SESSION_MSGS=[
+// your original messages, kept exactly as you wrote them
+"glad that you are trying im proud of yoh",
+"keep it up you doing progress even if its small",
+"hope the session was good keep it upp",
+"you are capable of everything you can think of .dont give up we belive in you",
+"progress is progress whatever the amount is.",
+// drafts in your style (edit freely)
+"you showed up today and thats what matters, im proud of u",
+"one more session done, keep going at ur own pace",
+"dont compare ur progress to anyone, ur doing ur best and we see it",
+"every minute u study is a step forward, even the small ones",
+"u did good today, take a breath and be proud of urself",
+"im really proud of how hard ur trying, never forget that",
+"slow progress is still progress, keep it up",
+"ur stronger than u think, and smarter too, we belive in u",
+"thank u for not giving up on urself, we wont either",
+"good job, now drink some water and relax a little",
+"u are doing better than u think, trust the process",
+"its okay if it wasnt a perfect session, the effort is what counts",
+"keep it upp bluebell, u got this",
+"ur future self is gonna be so thankful for today"
+];
+const BREAK_MSGS=[
+"Drink some water and stretch. You're doing great.",
+"Look away from the screen for a moment. Breathe.",
+"Break time. Your brain is working hard for you."
+];
+
+
+// ---- Session message order: first ever = "thank u for not giving up", then shuffled, no repeats until all are seen ----
+const FIRST_MSG="thank u for not giving up on urself, we wont either";
+let bag=[],lastIdx=-1;
+function nextSession(){
+  let first=false;
+  try{first=!localStorage.getItem("bluebell-first-msg")}catch(e){}
+  if(first){
+    try{localStorage.setItem("bluebell-first-msg","1")}catch(e){}
+    lastIdx=SESSION_MSGS.indexOf(FIRST_MSG);
+    return SESSION_MSGS[lastIdx];
+  }
+  if(!bag.length){
+    bag=SESSION_MSGS.map((_,i)=>i).sort(()=>Math.random()-.5);
+    if(bag.length>1&&bag[bag.length-1]===lastIdx){const t=bag[0];bag[0]=bag[bag.length-1];bag[bag.length-1]=t}
+  }
+  lastIdx=bag.pop();
+  return SESSION_MSGS[lastIdx];
+}
+
+// ---- Storage (private to this device/browser) ----
+const KEY="bluebell-log-v1";
+let log={};
+try{log=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){log={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(log))}catch(e){}}
+function dayKey(d){d=d||new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function addSeconds(s){const k=dayKey();log[k]=(log[k]||0)+s;save();renderTotals()}
+function fmt(sec){sec=Math.floor(sec);const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60);return h?h+"h "+m+"m":m+"m"}
+function renderTotals(){
+  const now=new Date(),today=dayKey(now);
+  const ws=new Date(now);const dow=(now.getDay()+6)%7;ws.setDate(now.getDate()-dow);ws.setHours(0,0,0,0);
+  let t=0,w=0,m=0;
+  for(const k in log){
+    const [y,mo,d]=k.split("-").map(Number),dt=new Date(y,mo-1,d);
+    if(k===today)t+=log[k];
+    if(dt>=ws)w+=log[k];
+    if(y===now.getFullYear()&&mo-1===now.getMonth())m+=log[k];
+  }
+  tToday.textContent=fmt(t);tWeek.textContent=fmt(w);tMonth.textContent=fmt(m);
+}
+
+// ---- State ----
+const $=id=>document.getElementById(id);
+const {time,phase,prog,go,reset,msg,lens,tToday,tWeek,tMonth}=Object.fromEntries(["time","phase","prog","go","reset","msg","lens","tToday","tWeek","tMonth"].map(i=>[i,$(i)]));
+let mode="pomo",focusMin=25,breakMin=5,onBreak=false,running=false,remaining=focusMin*60,elapsed=0,last=0,timer=null;
+const C=282.74;
+
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function say(t){msg.textContent=t;msg.classList.add("show")}
+function pad(n){return String(n).padStart(2,"0")}
+function show(){
+  if(mode==="pomo"){
+    const total=(onBreak?breakMin:focusMin)*60;
+    const r=Math.max(0,Math.ceil(remaining));
+    time.textContent=pad(Math.floor(r/60))+":"+pad(r%60);
+    prog.style.strokeDashoffset=C*(1-remaining/total);
+    phase.textContent=onBreak?"Break":"Focus";
+  }else{
+    const e=Math.floor(elapsed),h=Math.floor(e/3600);
+    time.textContent=(h?h+":":"")+pad(Math.floor(e%3600/60))+":"+pad(e%60);
+    prog.style.strokeDashoffset=0;phase.textContent="Free timing";
+  }
+  go.innerHTML=ic(running?"pause":"play")+(running?"Pause":"Start");
+}
+function tick(){
+  const now=Date.now(),d=(now-last)/1000;last=now;
+  if(mode==="pomo"){
+    remaining-=d;
+    if(!onBreak)addSeconds(d);
+    if(remaining<=0){
+      stop();
+      if(!onBreak){onBreak=true;remaining=breakMin*60;say(nextSession()+"\n\n"+pick(BREAK_MSGS))}
+      else{onBreak=false;remaining=focusMin*60;say("Break is over. Ready when you are.")}
+      msg.style.whiteSpace="pre-line";
+      try{navigator.vibrate&&navigator.vibrate(200)}catch(e){}
+    }
+  }else{elapsed+=d;addSeconds(d)}
+  show();
+}
+function start(){running=true;last=Date.now();timer=setInterval(tick,500);msg.classList.remove("show");show()}
+function stop(){running=false;clearInterval(timer);show()}
+go.onclick=()=>{
+  if(running){stop();if(mode==="stopwatch"&&elapsed>0)say(nextSession());msg.style.whiteSpace="normal"}else start()
+};
+reset.onclick=()=>{stop();onBreak=false;remaining=focusMin*60;elapsed=0;msg.classList.remove("show");show()};
+function setLen(f,b){focusMin=f;breakMin=b;if(!running){onBreak=false;remaining=f*60}show()}
+$("l25").onclick=()=>setLen(25,5);
+$("l50").onclick=()=>setLen(50,10);
+function setMode(m){
+  stop();mode=m;onBreak=false;remaining=focusMin*60;elapsed=0;msg.classList.remove("show");
+  $("tabP").classList.toggle("on",m==="pomo");$("tabS").classList.toggle("on",m==="stopwatch");
+  lens.style.visibility=m==="pomo"?"visible":"hidden";if(m!=="pomo")$("custom").classList.remove("open");show();
+}
+$("lc").onclick=()=>$("custom").classList.toggle("open");
+$("cset").onclick=()=>{
+  const f=Math.min(180,Math.max(1,parseInt($("cf").value)||25)),b=Math.min(60,Math.max(1,parseInt($("cb").value)||5));
+  $("cf").value=f;$("cb").value=b;setLen(f,b);$("custom").classList.remove("open");
+};
+$("tabP").onclick=()=>setMode("pomo");
+$("tabS").onclick=()=>setMode("stopwatch");
+$("themeBtn").onclick=()=>{
+  const r=document.documentElement,dark=getComputedStyle(r).getPropertyValue("--bg").trim()==="#1f2a37";
+  r.setAttribute("data-theme",dark?"light":"dark");
+};
+
+// ---- Breathing exercise: 4s in, 6s out ----
+let bTimers=[],bOpen=false;
+function bWait(fn,ms){bTimers.push(setTimeout(fn,ms))}
+function bPhase(label,secs,scale){
+  if(!bOpen)return;
+  const orb=$("orb");
+  $("blabel").textContent=label;
+  orb.style.transition="transform "+secs+"s ease-in-out";
+  orb.style.transform="scale("+scale+")";
+  for(let i=1;i<=secs;i++)bWait(()=>{$("bcount").textContent=i},(i-1)*1000);
+  bWait(()=>{label==="Breathe in"?bPhase("Breathe out",6,.55):bPhase("Breathe in",4,1)},secs*1000);
+}
+function openBreathe(){
+  bOpen=true;$("bov").classList.add("open");
+  const orb=$("orb");orb.style.transition="none";orb.style.transform="scale(.55)";
+  $("blabel").textContent="Get comfortable";$("bcount").textContent="";
+  bWait(()=>bPhase("Breathe in",4,1),1800);
+}
+function closeBreathe(){bOpen=false;bTimers.forEach(clearTimeout);bTimers=[];$("bov").classList.remove("open")}
+$("blink").onclick=openBreathe;
+$("bdone").onclick=closeBreathe;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&bOpen)closeBreathe()});
+
+// ---- Hard day ----
+const HARD_MSGS=[
+"Hey i know its hard and it seems kinda impossible and its okay to feel this way but always know that one bad day or a hard period doesnt change ur value as an ineffable soul and smart person ,i know sometimes it even be hard to belive this but its the truth ,take rest and get back whenever you feel ready ,even 10 min counts ,as always proud of you even if the only thing you did was waking up ",
+"Some days feels heavy and seems too much and its alright to feel this way,  yet a bad day doesnt define who you are or set your worth you are always more than that, take rest you deserve it and whenever you feel like it do it if today wasnt the day tomorrow is still there , as always im by ur side i belive in you "
+];
+let hIdx=-1;
+function hShow(){let i;do{i=Math.floor(Math.random()*HARD_MSGS.length)}while(i===hIdx&&HARD_MSGS.length>1);hIdx=i;$("hcard").textContent=HARD_MSGS[i]}
+$("hlink").onclick=()=>{hShow();$("hov").classList.add("open")};
+$("hnext").onclick=hShow;
+$("hclose").onclick=()=>$("hov").classList.remove("open");
+$("hbreathe").onclick=()=>{$("hov").classList.remove("open");openBreathe()};
+
+// ---- Optional sounds (all off by default; made live in the browser) ----
+let ac=null,master=null,mus=null;
+function audio(){
+  if(!ac){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;ac=new AC();master=ac.createGain();master.gain.value=$("vol").value/100*0.6;master.connect(ac.destination)}
+  if(ac.state==="suspended")ac.resume();
+  return ac;
+}
+function mkBus(){const g=ac.createGain();g.gain.value=1;g.connect(master);return g}
+function fadeOut(bus,after){
+  const t=ac.currentTime;bus.gain.cancelScheduledValues(t);bus.gain.setValueAtTime(bus.gain.value,t);bus.gain.linearRampToValueAtTime(0,t+.35);
+  setTimeout(()=>{try{after&&after()}catch(e){}try{bus.disconnect()}catch(e){}},500);
+}
+const CHORDS=[[261.6,329.6,392,493.9],[220,261.6,329.6,392],[174.6,220,261.6,329.6],[196,246.9,293.7,349.2]];
+function playChord(m){
+  const c=ac,t=c.currentTime,dur=7;
+  CHORDS[m.i%CHORDS.length].forEach((f,i)=>{
+    const o=c.createOscillator(),g=c.createGain();
+    o.type="sine";o.frequency.value=f;o.detune.value=(i-1.5)*4;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.07,t+2.2);g.gain.linearRampToValueAtTime(0,t+dur);
+    o.connect(g);g.connect(m.bus);o.start(t);o.stop(t+dur+.1);
+  });m.i++;
+}
+function startMusic(){
+  if(!audio())return;
+  mus={bus:mkBus(),i:0,timer:null};
+  playChord(mus);const m=mus;
+  mus.timer=setInterval(()=>playChord(m),5500);
+}
+function stopMusic(){
+  if(!mus)return;const m=mus;mus=null;clearInterval(m.timer);fadeOut(m.bus);
+}
+function toggle(btn,isOn,start,stop){
+  if(isOn()){stop();btn.textContent="Off";btn.classList.remove("on")}
+  else{start();btn.textContent="On";btn.classList.add("on")}
+}
+$("slink").onclick=()=>$("snd").classList.toggle("open");
+$("tMus").onclick=()=>toggle($("tMus"),()=>!!mus,startMusic,stopMusic);
+$("vol").oninput=()=>{if(master)master.gain.value=$("vol").value/100*0.6};
+
+// ---- Icons ----
+const IC={
+play:'<polygon points="7 4 20 12 7 20 7 4" fill="currentColor"/>',
+pause:'<rect x="6" y="4" width="4" height="16" fill="currentColor"/><rect x="14" y="4" width="4" height="16" fill="currentColor"/>',
+reset:'<path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 10 9 10"/>',
+wind:'<path d="M3 8h10a3 3 0 1 0-3-3"/><path d="M3 12h15a3 3 0 1 1-3 3"/><path d="M3 16h7"/>',
+heart:'<path d="M12 21s-7-4.4-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.6-9.5 9-9.5 9z"/>',
+sound:'<polygon points="3 9 8 9 13 5 13 19 8 15 3 15"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/>',
+sliders:'<line x1="4" y1="7" x2="20" y2="7"/><circle cx="9" cy="7" r="2"/><line x1="4" y1="17" x2="20" y2="17"/><circle cx="15" cy="17" r="2"/>',
+moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+x:'<line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>',
+check:'<polyline points="5 12 10 17 19 7"/>',
+clock:'<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/>',
+stopwatch:'<circle cx="12" cy="13" r="8"/><line x1="12" y1="13" x2="12" y2="8"/><line x1="10" y1="2" x2="14" y2="2"/><line x1="12" y1="2" x2="12" y2="5"/>'
+};
+function ic(n){return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">'+IC[n]+'</svg>'}
+function decorate(){
+  const L={reset:["reset","Reset"],blink:["wind","Breathe for a minute"],hlink:["heart","Having a hard day?"],slink:["sound","Sounds (optional)"],lc:["sliders","Custom"],cset:["check","Set"],bdone:["x","Close"],hnext:["reset","Another note"],hbreathe:["wind","Breathe"],hclose:["x","Close"],tabP:["clock","Pomodoro"],tabS:["stopwatch","Stopwatch"],themeBtn:["moon","Theme"]};
+  for(const id in L)$(id).innerHTML=ic(L[id][0])+L[id][1];
+}
+
+// ---- Floating cat: nudges every few minutes, shows a message when pressed ----
+const CAT_MSGS=["proud of u","Keep it up","Im right by your side"];
+let catI=0,catHide=null;
+function catNudge(){
+  $("badge").classList.add("on");
+  const b=$("catbtn");b.classList.remove("nudge");void b.offsetWidth;b.classList.add("nudge");
+}
+function catReact(){
+  const sv=$("catsvg");sv.classList.remove("hop");void sv.getBoundingClientRect();sv.classList.add("hop");
+  const h=document.createElement("span");h.className="heartpop";
+  h.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 21s-7-4.4-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.6-9.5 9-9.5 9z"/></svg>';
+  $("catbtn").appendChild(h);setTimeout(()=>h.remove(),1200);
+}
+function catTalk(){
+  $("badge").classList.remove("on");
+  const bub=$("catbub");bub.textContent=CAT_MSGS[catI%CAT_MSGS.length];catI++;bub.classList.add("show");
+  catReact();
+  clearTimeout(catHide);catHide=setTimeout(()=>bub.classList.remove("show"),6000);
+}
+$("catbtn").onclick=catTalk;
+// notification dot only 3 times (at 10, 20 and 30 minutes); after that the cat only speaks when pressed
+[10,20,30].forEach(m=>setTimeout(catNudge,m*60000));
+try{if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js")}catch(e){}
+decorate();renderTotals();show();
+</script>
+</body>
+</html>
